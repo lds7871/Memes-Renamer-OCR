@@ -62,11 +62,11 @@ public class Main {
             long duration = System.currentTimeMillis() - startTime;
 
             if (recognizedText.isEmpty()) {
-                System.out.println("未识别到文字或识别失败");
+                System.out.println("⚠  未识别到文字或识别失败，跳过此文件，保持原有名称");
             } else {
-                System.out.println("识别结果 (耗时: " + duration + "ms):");
-                System.out.println("字符数: " + recognizedText.length());
-                System.out.println("内容: " + recognizedText);
+                System.out.println("✓ 识别结果 (耗时: " + duration + "ms):");
+                System.out.println("  字符数: " + recognizedText.length());
+                System.out.println("  内容: " + recognizedText);
                 System.out.println();
 
                 // 根据识别结果重命名文件
