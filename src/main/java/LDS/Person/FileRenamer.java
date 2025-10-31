@@ -127,17 +127,45 @@ public class FileRenamer {
 
     /**
      * 清理文件名中的非法字符
-     * Windows 不允许的字符: < > : " / \ | ? *
+     * 仅保留: 中文字符、英文字母、数字
+     * 移除: 所有符号、特殊字符、标点等（包括 Windows 不允许的字符）
      *
      * @param text 原始文本
-     * @return 清理后的文本（移除所有非法字符）
+     * @return 清理后的文本（仅包含中文、英文、数字）
      */
     private static String cleanInvalidChars(String text) {
         if (text == null || text.isEmpty()) {
             return "";
         }
-        // 移除 Windows 不允许的所有字符: < > : " / \ | ? *
-        return text.replaceAll("[<>:\"/\\\\|?*]", "");
+        
+        StringBuilder result = new StringBuilder();
+        for (char c : text.toCharArray()) {
+            // 仅保留: 中文字符、英文字母、数字
+            if (isChinese(c) || Character.isLetter(c) || Character.isDigit(c)) {
+                result.append(c);
+            }
+            // 所有其他字符（包括符号、标点、空格等）都会被过滤
+        }
+        
+        return result.toString();
+    }
+
+    /**
+     * 检查字符是否为中文
+     *
+     * @param c 待检查的字符
+     * @return true 如果是中文字符
+     */
+    private static boolean isChinese(char c) {
+        Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
+        return ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS ||
+               ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A ||
+               ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B ||
+               ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C ||
+               ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D ||
+               ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_E ||
+               ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_F ||
+               ub == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS;
     }
 
     /**

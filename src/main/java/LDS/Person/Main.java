@@ -19,11 +19,18 @@ public class Main {
         System.out.println("项目根目录: " + projectRoot);
         System.out.println();
 
-        // 设置 OCR 语言
-        // 可选语言: "eng" (英文), "chi_sim" (简体中文), "chi_tra" (繁体中文) 等
-        // 注意: 首次使用时需要自动下载相应的语言数据文件
-        OCRService.setLanguage("chi_sim");
-        System.out.println("OCR 语言已设置为: chi_sim (简体中文)");
+        // 加载 OCR 配置文件
+        OcrConfig.printConfig();
+
+        // 从配置文件读取设置并应用
+        String language = OcrConfig.getLanguage();
+        double confidenceThreshold = OcrConfig.getConfidenceThreshold();
+        
+        OCRService.setLanguage(language);
+        System.out.println("✓ 已从配置文件加载语言设置: " + language);
+        
+        OCRService.setConfidenceThreshold(confidenceThreshold);
+        System.out.println("✓ 已从配置文件加载置信度阈值: " + String.format("%.0f", confidenceThreshold) + "%");
         System.out.println();
 
         // 扫描 IMG 文件夹中的所有图片
@@ -33,7 +40,7 @@ public class Main {
 
         if (imageFiles.isEmpty()) {
             System.out.println("未找到任何支持的图片文件。");
-            System.out.println("支持的格式: .png, .jpg, .jpeg, .bmp, .tiff, .gif");
+            System.out.println("支持的格式: .png, .jpg, .jpeg, .bmp, .tiff");
             return;
         }
 
@@ -62,9 +69,10 @@ public class Main {
             long duration = System.currentTimeMillis() - startTime;
 
             if (recognizedText.isEmpty()) {
-                System.out.println("⚠  未识别到文字或识别失败，跳过此文件，保持原有名称");
+                System.out.println("  ✓ 耗时: " + duration + "ms");
+                System.out.println("  状态: 未识别到有效文字，跳过重命名");
             } else {
-                System.out.println("✓ 识别结果 (耗时: " + duration + "ms):");
+                System.out.println("✓ 识别成功 (耗时: " + duration + "ms)");
                 System.out.println("  字符数: " + recognizedText.length());
                 System.out.println("  内容: " + recognizedText);
                 System.out.println();

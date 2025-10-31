@@ -9,7 +9,7 @@ import java.util.List;
  * 用于递归扫描指定目录下的所有支持的图片文件
  */
 public class ImageScanner {
-    private static final String[] SUPPORTED_FORMATS = {".png", ".jpg", ".jpeg", ".bmp", ".tiff", ".gif"};
+    private static final String[] SUPPORTED_FORMATS = {".png", ".jpg", ".jpeg", ".bmp", ".tiff"};
 
     /**
      * 扫描指定目录下的所有支持的图片文件
